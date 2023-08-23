@@ -94,3 +94,33 @@ it('sidecar - can determine if the given mjml can be converted to html without a
     expect(Mjml::new()->sidecar()->canConvert(mjmlSnippetWithError()))->toBeTrue();
     expect(Mjml::new()->sidecar()->canConvertWithoutErrors(mjmlSnippetWithError()))->toBeFalse();
 });
+
+function mjmlSnippet(): string
+{
+    return <<<'MJML'
+        <mjml>
+          <mj-body>
+            <mj-section>
+              <mj-column>
+                <mj-text>Hello World</mj-text>
+              </mj-column>
+            </mj-section>
+          </mj-body>
+        </mjml>
+        MJML;
+}
+
+function mjmlSnippetWithError(): string
+{
+    return <<<'MJML'
+        <mjml>
+          <mj-body>
+            <mj-section>
+              <mj-column>
+                <mj-text invalid-attribute>Hello World</mj-text>
+              </mj-column>
+            </mj-section>
+          </mj-body>
+        </mjml>
+        MJML;
+}

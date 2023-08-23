@@ -7,7 +7,7 @@ use Hammerstone\Sidecar\Providers\SidecarServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\Bootstrap\LoadEnvironmentVariables;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\Mjml\Functions\MjmlFunction;
+use Spatie\MjmlSidecar\MjmlFunction;
 
 class TestCase extends Orchestra
 {
