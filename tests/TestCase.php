@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\Bootstrap\LoadEnvironmentVariables;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Mjml\Functions\MjmlFunction;
-use Spatie\MjmlSidecar\MjmlSidecarServiceProvider;
 
 class TestCase extends Orchestra
 {

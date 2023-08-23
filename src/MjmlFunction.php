@@ -21,7 +21,7 @@ class MjmlFunction extends LambdaFunction
     public function package(): Package
     {
         return Package::make()
-            ->setBasePath(__DIR__ . '/../lambda')
+            ->setBasePath(__DIR__.'/../lambda')
             ->include('*');
     }
 
