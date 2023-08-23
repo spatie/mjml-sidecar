@@ -1,0 +1,86 @@
+{
+    "name": "spatie/mjml-sidecar",
+    "description": "Compile MJML to HTML using Sidecar",
+    "keywords": [
+        "spatie",
+        "laravel",
+        "mjml-sidecar"
+    ],
+    "homepage": "https://github.com/spatie/mjml-sidecar",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rias",
+            "email": "rias@spatie.be",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "hammerstone/sidecar": "^0.4.1",
+        "illuminate/contracts": "^10.0",
+        "spatie/laravel-package-tools": "^1.14.0",
+        "spatie/mjml-php": "0.*|^1.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.8",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^8.8",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-arch": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spatie\\MjmlSidecar\\": "src/",
+            "Spatie\\MjmlSidecar\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spatie\\MjmlSidecar\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "clear": "@php vendor/bin/testbench package:purge-mjml-sidecar --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": [
+            "@composer run prepare",
+            "@php vendor/bin/testbench workbench:build --ansi"
+        ],
+        "start": [
+            "@composer run build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spatie\\MjmlSidecar\\MjmlSidecarServiceProvider"
+            ],
+            "aliases": {
+                "MjmlSidecar": "Spatie\\MjmlSidecar\\Facades\\MjmlSidecar"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
