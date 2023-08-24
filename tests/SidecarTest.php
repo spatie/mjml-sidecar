@@ -5,19 +5,19 @@ use Spatie\Mjml\Mjml;
 use Spatie\Mjml\MjmlError;
 use Spatie\Mjml\MjmlResult;
 
-it('sidecar - can render mjml without any options', function () {
+it('can render mjml without any options', function () {
     $html = Mjml::new()->sidecar()->toHtml(mjmlSnippet());
 
     expect($html)->toMatchSnapshot();
 });
 
-it('sidecar - can handle invalid mjml', function () {
+it('can handle invalid mjml', function () {
     $invalidMjml = '<2mjml></2mjml>';
 
     Mjml::new()->sidecar()->toHtml($invalidMjml);
 })->throws(CouldNotConvertMjml::class, 'Parsing failed. Check your mjml');
 
-it('sidecar - will render comments by default', function () {
+it('will render comments by default', function () {
     $mjml = <<<'MJML'
         <mjml>
             <mj-body>
@@ -31,7 +31,7 @@ it('sidecar - will render comments by default', function () {
     expect($html)->toContain('<!-- my comment -->');
 });
 
-it('sidecar - can hide comments by default', function () {
+it('can hide comments by default', function () {
     $mjml = <<<'MJML'
         <mjml>
             <mj-body>
@@ -45,19 +45,19 @@ it('sidecar - can hide comments by default', function () {
     expect($html)->not->toContain('<!-- my comment -->');
 });
 
-it('sidecar - can beautify the rendered html', function () {
+it('can beautify the rendered html', function () {
     $html = Mjml::new()->sidecar()->beautify()->toHtml(mjmlSnippet());
 
     expect($html)->toMatchSnapshot();
 });
 
-it('sidecar - can minify the rendered html', function () {
+it('can minify the rendered html', function () {
     $html = Mjml::new()->sidecar()->minify()->toHtml(mjmlSnippet());
 
     expect($html)->toMatchSnapshot();
 });
 
-it('sidecar - can return a direct result from mjml', function () {
+it('can return a direct result from mjml', function () {
     $result = Mjml::new()->sidecar()->minify()->convert(mjmlSnippet());
 
     expect($result)
@@ -68,7 +68,7 @@ it('sidecar - can return a direct result from mjml', function () {
         ->hasErrors()->toBeFalse();
 });
 
-it('sidecar - can return a direct result from mjml with errors', function () {
+it('can return a direct result from mjml with errors', function () {
     $result = Mjml::new()->sidecar()->convert(mjmlSnippetWithError());
 
     expect($result)->hasErrors()->toBeTrue();
@@ -80,7 +80,7 @@ it('sidecar - can return a direct result from mjml with errors', function () {
         ->tagName()->toBe('mj-text');
 });
 
-it('sidecar - can determine if the given mjml can be converted to html', function (string $mjml, bool $expectedResult) {
+it('can determine if the given mjml can be converted to html', function (string $mjml, bool $expectedResult) {
     expect(Mjml::new()->sidecar()->canConvert($mjml))->toBe($expectedResult);
 })->with([
     [mjmlSnippet(), true],
@@ -90,7 +90,7 @@ it('sidecar - can determine if the given mjml can be converted to html', functio
     ['<html><mjml></mjml></html>', false],
 ]);
 
-it('sidecar - can determine if the given mjml can be converted to html without any errors', function () {
+it('can determine if the given mjml can be converted to html without any errors', function () {
     expect(Mjml::new()->sidecar()->canConvert(mjmlSnippetWithError()))->toBeTrue();
     expect(Mjml::new()->sidecar()->canConvertWithoutErrors(mjmlSnippetWithError()))->toBeFalse();
 });
