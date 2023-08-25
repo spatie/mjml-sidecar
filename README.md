@@ -72,7 +72,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Rias](https://github.com/spatie)
+- [Rias Van der Veken](https://github.com/spatie)
 - [All Contributors](../../contributors)
 
 ## License
