@@ -71,16 +71,6 @@
             "phpstan/extension-installer": true
         }
     },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Spatie\\MjmlSidecar\\MjmlSidecarServiceProvider"
-            ],
-            "aliases": {
-                "MjmlSidecar": "Spatie\\MjmlSidecar\\Facades\\MjmlSidecar"
-            }
-        }
-    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
