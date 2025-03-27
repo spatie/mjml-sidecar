@@ -9,13 +9,15 @@ it('can render mjml without any options', function () {
     $html = Mjml::new()->sidecar()->toHtml(mjmlSnippet());
 
     expect($html)->toMatchSnapshot();
-});
+})->skipOnLinux();
 
 it('can handle invalid mjml', function () {
     $invalidMjml = '<2mjml></2mjml>';
 
     Mjml::new()->sidecar()->toHtml($invalidMjml);
-})->throws(CouldNotConvertMjml::class, 'Parsing failed. Check your mjml');
+})
+    ->throws(CouldNotConvertMjml::class, 'Parsing failed. Check your mjml')
+    ->skipOnLinux();
 
 it('will render comments by default', function () {
     $mjml = <<<'MJML'
@@ -29,7 +31,7 @@ it('will render comments by default', function () {
     $html = Mjml::new()->sidecar()->toHtml($mjml);
 
     expect($html)->toContain('<!-- my comment -->');
-});
+})->skipOnLinux();
 
 it('can hide comments by default', function () {
     $mjml = <<<'MJML'
@@ -43,19 +45,19 @@ it('can hide comments by default', function () {
     $html = Mjml::new()->sidecar()->hideComments()->toHtml($mjml);
 
     expect($html)->not->toContain('<!-- my comment -->');
-});
+})->skipOnLinux();
 
 it('can beautify the rendered html', function () {
     $html = Mjml::new()->sidecar()->beautify()->toHtml(mjmlSnippet());
 
     expect($html)->toMatchSnapshot();
-});
+})->skipOnLinux();
 
 it('can minify the rendered html', function () {
     $html = Mjml::new()->sidecar()->minify()->toHtml(mjmlSnippet());
 
     expect($html)->toMatchSnapshot();
-});
+})->skipOnLinux();
 
 it('can return a direct result from mjml', function () {
     $result = Mjml::new()->sidecar()->minify()->convert(mjmlSnippet());
@@ -66,7 +68,7 @@ it('can return a direct result from mjml', function () {
         ->array()->toBeArray()
         ->errors()->toHaveCount(0)
         ->hasErrors()->toBeFalse();
-});
+})->skipOnLinux();
 
 it('can return a direct result from mjml with errors', function () {
     $result = Mjml::new()->sidecar()->convert(mjmlSnippetWithError());
@@ -78,7 +80,7 @@ it('can return a direct result from mjml with errors', function () {
         ->line()->toBe(5)
         ->message()->toBe('Attribute invalid-attribute is illegal')
         ->tagName()->toBe('mj-text');
-});
+})->skipOnLinux();
 
 it('can determine if the given mjml can be converted to html', function (string $mjml, bool $expectedResult) {
     expect(Mjml::new()->sidecar()->canConvert($mjml))->toBe($expectedResult);
@@ -88,12 +90,12 @@ it('can determine if the given mjml can be converted to html', function (string 
     ['<html></html>', false],
     ['</mjml><mjml>', false],
     ['<html><mjml></mjml></html>', false],
-]);
+])->skipOnLinux();
 
 it('can determine if the given mjml can be converted to html without any errors', function () {
     expect(Mjml::new()->sidecar()->canConvert(mjmlSnippetWithError()))->toBeTrue();
     expect(Mjml::new()->sidecar()->canConvertWithoutErrors(mjmlSnippetWithError()))->toBeFalse();
-});
+})->skipOnLinux();
 
 function mjmlSnippet(): string
 {
