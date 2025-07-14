@@ -2,6 +2,19 @@
 
 All notable changes to `mjml-sidecar` will be documented in this file.
 
+## 1.1.1 - 2025-07-14
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot[bot] in https://github.com/spatie/mjml-sidecar/pull/14
+* Support Laravel 12 by @danielboendergaard in https://github.com/spatie/mjml-sidecar/pull/16
+
+### New Contributors
+
+* @danielboendergaard made their first contribution in https://github.com/spatie/mjml-sidecar/pull/16
+
+**Full Changelog**: https://github.com/spatie/mjml-sidecar/compare/1.1.0...1.1.1
+
 ## 1.1.0 - 2025-03-27
 
 ### What's Changed
