@@ -6,6 +6,8 @@ on:
     paths:
       - '**.php'
       - '.github/workflows/run-tests.yml'
+      - 'tests/invoke.mjs'
+      - 'lambda/**'
       - 'phpunit.xml.dist'
       - 'composer.json'
 
@@ -17,14 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [8.4, 8.3, 8.2]
-        laravel: [12.*, 11.*, 10.*]
+        php: ['8.6', '8.5', '8.4', '8.3', '8.2']
+        laravel: [12.*]
         stability: [prefer-stable]
         include:
-          - laravel: 10.*
-            testbench: ^8.0
-          - laravel: 11.*
-            testbench: ^9.0
           - laravel: 12.*
             testbench: ^10.0
 
@@ -34,12 +32,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: none
+          coverage: pcov
 
       - name: Setup problem matchers
         run: |
@@ -52,11 +55,10 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
-        run: composer show -D
+        run: |
+          php --version
+          node --version
+          composer show
 
-      - name: Execute tests
-        run: vendor/bin/pest
-        env:
-          SIDECAR_ACCESS_KEY_ID: ${{secrets.SIDECAR_ACCESS_KEY_ID}}
-          SIDECAR_SECRET_ACCESS_KEY: ${{secrets.SIDECAR_SECRET_ACCESS_KEY}}
-          SIDECAR_EXECUTION_ROLE: ${{secrets.SIDECAR_EXECUTION_ROLE}}
+      - name: Execute tests (local Lambda handler, no AWS)
+        run: vendor/bin/pest --display-deprecations --display-phpunit-deprecations
