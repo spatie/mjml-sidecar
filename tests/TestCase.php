@@ -2,12 +2,17 @@
 
 namespace Spatie\MjmlSidecar\Tests;
 
-use Hammerstone\Sidecar\Deployment;
+use Aws\CommandInterface;
+use Aws\Result;
+use GuzzleHttp\Promise\Create;
+use GuzzleHttp\Promise\PromiseInterface;
+use Hammerstone\Sidecar\Clients\LambdaClient;
 use Hammerstone\Sidecar\Providers\SidecarServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\Bootstrap\LoadEnvironmentVariables;
+use LogicException;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\MjmlSidecar\MjmlFunction;
+use Symfony\Component\Process\Process;
 
 class TestCase extends Orchestra
 {
@@ -29,17 +34,28 @@ class TestCase extends Orchestra
 
     protected function getEnvironmentSetUp($app)
     {
-        $app->useEnvironmentPath(__DIR__.'/..');
-        $app->bootstrapWith([LoadEnvironmentVariables::class]);
-
         config()->set('sidecar.functions', [MjmlFunction::class]);
         config()->set('sidecar.env', 'testing');
-        config()->set('sidecar.aws_key', env('SIDECAR_ACCESS_KEY_ID'));
-        config()->set('sidecar.aws_secret', env('SIDECAR_SECRET_ACCESS_KEY'));
-        config()->set('sidecar.aws_region', 'eu-central-1');
-        config()->set('sidecar.aws_bucket', 'sidecar-mjml');
-        config()->set('sidecar.execution_role', env('SIDECAR_EXECUTION_ROLE'));
 
-        Deployment::make()->deploy()->activate();
+        $app->instance(LambdaClient::class, new LambdaClient([
+            'version' => 'latest',
+            'region' => 'eu-central-1',
+            'credentials' => ['key' => 'local-only', 'secret' => 'local-only'],
+            'handler' => function (CommandInterface $command): PromiseInterface {
+                if ($command->getName() !== 'Invoke') {
+                    throw new LogicException('Only local Lambda invocations are allowed in tests.');
+                }
+
+                $process = new Process(['node', __DIR__.'/invoke.mjs']);
+                $process->setInput($command['Payload']);
+                $process->mustRun();
+
+                return Create::promiseFor(new Result([
+                    'StatusCode' => 200,
+                    'Payload' => $process->getOutput(),
+                    'LogResult' => '',
+                ]));
+            },
+        ]));
     }
 }

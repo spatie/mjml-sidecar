@@ -27,6 +27,6 @@ class MjmlFunction extends LambdaFunction
 
     public function runtime(): string
     {
-        return Runtime::NODEJS_16;
+        return Runtime::NODEJS_22;
     }
 }

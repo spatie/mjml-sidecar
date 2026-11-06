@@ -6,6 +6,8 @@ on:
     paths:
       - '**.php'
       - '.github/workflows/run-tests.yml'
+      - 'tests/invoke.mjs'
+      - 'lambda/**'
       - 'phpunit.xml.dist'
       - 'composer.json'
 
@@ -30,6 +32,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -48,8 +55,10 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
-        run: composer show -D
+        run: |
+          php --version
+          node --version
+          composer show
 
-      # The integration TestCase deploys to AWS before Pest applies skipOnLinux.
-      - name: Execute architecture tests (no AWS deployment)
-        run: vendor/bin/pest tests/ArchTest.php
+      - name: Execute tests (local Lambda handler, no AWS)
+        run: vendor/bin/pest --display-deprecations --display-phpunit-deprecations
